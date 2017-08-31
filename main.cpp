@@ -24,6 +24,7 @@ void RunLeagueScores() {
    string holesPlayed;
    string lastName;
    string firstName;
+   bool save = false;
    int score = 0;
    int playerNum = 1;
    
@@ -36,9 +37,11 @@ void RunLeagueScores() {
    getline(cin, holesPlayed);
    
    cout << "Enter first initial then last name and then scores, Example: \"J Armknecht 4 4 5 3 4 4 4 3 5\"" << endl << endl;
+   cout << "Enter \"upload\" to upload saved scores from the file \"SavedScores.txt\"" << endl;
    cout << "Enter \"print\" to print all of the golfers entered so far" << endl;
    cout << "Enter \"delete\" to delete the last golfer added" << endl;
    cout << "Enter \"edit\" to edit a golfer entered" << endl;
+   cout << "Enter \"save\" to save and quit to finish for later" << endl;
    cout << "Enter \"quit\" when all players have been added" << endl << endl;
    
    while (true) {
@@ -55,10 +58,51 @@ void RunLeagueScores() {
       inSS.str(lineString);
       
       inSS >> lastName;
-      if (lastName == "quit") {
+      if (lastName == "quit" || lastName == "Quit") {
          break;
       }
-      else if (lastName == "delete") {
+      else if (lastName == "upload" || lastName == "Upload") {
+         ifstream inFS;
+         
+         cout << "Uploading file \"SavedScores.txt\"" << endl;
+         
+         inFS.open("SavedScores.txt");
+         if (!inFS.is_open()) {
+            cout << "Could not upload file \"SavedScores.txt\"" << endl;
+         }
+         
+         if (inFS.peek() == EOF) {
+            //do nothing, There are not scores in the file
+            cout << "The file is empty. Cannot upload!" << endl;
+         }
+         else {
+            while (!inFS.eof()) {
+               Player* player = new Player();
+               inSS.clear();
+               getline(inFS, lineString);
+               inSS.str(lineString);
+               
+               inSS >> lastName;
+               player->SetLastName(lastName);
+               
+               inSS >> firstName;
+               player->SetFirstName(firstName);
+               
+               while (!inSS.eof()) {
+                  inSS >> score;
+                  player->SetScoreByHole(score);
+               }
+               myLeague.AddPlayer(player);
+               playerNum++;
+            }
+            inFS.close();
+         }
+      }
+      else if (lastName == "save" || lastName == "Save") {
+         save = true;
+         break;
+      }
+      else if (lastName == "delete" || lastName == "Delete") {
          if (myLeague.GetAmountOfPlayers() == 0) {
             cout << "No players have been added can't delete" << endl;
          }
@@ -67,11 +111,11 @@ void RunLeagueScores() {
             playerNum--;
          }
       }
-      else if (lastName == "print") {
+      else if (lastName == "print" || lastName == "Print") {
          cout << myLeague.PrintGolfers(holesPlayed);
          cout << endl;
       }
-      else if (lastName == "edit") {
+      else if (lastName == "edit" || lastName == "Edit") {
          myLeague.EditGolfer(holesPlayed);
       }
       else {
@@ -100,7 +144,7 @@ void RunLeagueScores() {
       }
    }
    
-   if (myLeague.GetAmountOfPlayers() != 0) {
+   if ((myLeague.GetAmountOfPlayers() != 0) && (!save)) {
       stringstream ss;
       ss.clear();
       
@@ -139,6 +183,21 @@ void RunLeagueScores() {
          outScores << myLeague.PrintGolfers(holesPlayed);
          outScores.close();
       }
+   }
+   else if (save) {
+      cout << "Generating and saving results so far" << endl;
+      
+      ofstream saveScores;
+      
+      saveScores.open("SavedScores.txt");
+      if (!saveScores.is_open()) {
+         cout << "An error occured while trying to generate \"SavedScoreds.txt\"" << endl;
+      }
+      else {
+         saveScores << myLeague.SaveGolfers();
+         saveScores.close();
+      }
+      
    }
    
    cout << "Thank you for using the program!" << endl;

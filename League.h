@@ -30,6 +30,8 @@ public:
    
    std::string PrintGolfers(std::string holesPlayed);
    
+   std::string SaveGolfers();
+   
    std::string toString(std::string holesPlayed);
    
 private:

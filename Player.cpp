@@ -82,6 +82,19 @@ std::string Player::PrintScores(std::string holesPlayed) {
    return ss.str();
 }
 
+std::string Player::SaveScores() {
+   std::stringstream ss;
+   
+   for (int i = 0; i < GetNumOfHoles(); i++) {
+      ss << this->scores.at(i);
+      if (i < GetNumOfHoles() - 1) {
+         ss << " ";
+      }
+   }
+   
+   return ss.str();
+}
+
 std::string Player::GetFullName() {
    std::stringstream ss;
    

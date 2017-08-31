@@ -29,6 +29,7 @@ public:
    int GetScoreByHole(int i) const; //returns one score, this will be called to get the lowest score back
    std::vector<int> GetScores() const; //returns all of the scores for one player
    std::string PrintScores(std::string holesPlayed);
+   std::string SaveScores();
    void SetScoreAt(int index, int newScore);
    void ClearScores();
    

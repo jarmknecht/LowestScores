@@ -238,6 +238,23 @@ std::string League::PrintGolfers(std::string holesPlayed) {
    return ss.str();
 }
 
+std::string League::SaveGolfers() {
+   std::stringstream ss;
+   if (GetAmountOfPlayers() == 0) {
+      return "";
+   }
+   else {
+      for (int i = 0; i < this->players.size(); i++) {
+         ss << this->players.at(i)->GetLastName() << " " << this->players.at(i)->GetFirstName() << " ";
+         ss << this->players.at(i)->SaveScores();
+         if (i < this->players.size() - 1) {
+            ss << std::endl;
+         }
+      }
+   }
+   return ss.str();
+}
+
 void League::DeletePlayer() {
    delete this->players.back();
    this->players.pop_back();
