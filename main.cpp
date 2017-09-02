@@ -54,6 +54,10 @@ void RunLeagueScores() {
       
       getline(cin, lineString);
       
+      if (isspace(lineString.back())) {
+         lineString.pop_back();
+      }
+      
       inSS.clear();
       inSS.str(lineString);
       
@@ -80,6 +84,11 @@ void RunLeagueScores() {
                Player* player = new Player();
                inSS.clear();
                getline(inFS, lineString);
+               
+               if (isspace(lineString.back())) {
+                  lineString.pop_back();
+               }
+               
                inSS.str(lineString);
                
                inSS >> lastName;
@@ -123,9 +132,11 @@ void RunLeagueScores() {
       
          inSS >> firstName;
          newPlayer->SetFirstName(firstName);
-      
+         
          while (!inSS.eof()) {
+
             inSS >> score;
+         
             while (inSS.fail()) {
                newPlayer->ClearScores();
                
@@ -133,6 +144,11 @@ void RunLeagueScores() {
                
                cout << "Adding scores failed. Please type scores again: ";
                getline(cin, lineString);
+               
+               if (isspace(lineString.back())) {
+                  lineString.pop_back();
+               }
+               
                inSS.str(lineString);
                
                inSS >> score;
